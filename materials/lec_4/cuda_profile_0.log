@@ -1,0 +1,7 @@
+# NV_Warning: The legacy Command Line Profiler is deprecated and will be no longer available as of the next major release of the CUDA toolkit. Please use nvprof.
+# CUDA_PROFILE_LOG_VERSION 2.0
+# CUDA_DEVICE 0 Tesla K80
+# CUDA_CONTEXT 1
+# TIMESTAMPFACTOR 14679b8d24303997
+method,gputime,cputime,occupancy
+method=[ _Z10sum_kernelmPdS_S_ ] gputime=[ 261465.594 ] cputime=[ 12523.810 ] occupancy=[ 1.000 ] 
