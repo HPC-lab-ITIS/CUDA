@@ -35,7 +35,7 @@ int main()
     }
 
     std::uniform_real_distribution<double> distribution(0.0, 1.0);
-    std::mt19937 engine; 
+    std::mt19937 engine;
     auto generator = std::bind(distribution, engine);
     std::generate_n(a, n, generator);
 
