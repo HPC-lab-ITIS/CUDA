@@ -4,23 +4,20 @@ template <typename group_t> __device__ float reduce_sum(group_t g, float *temp, 
 {
 	int lane = g.thread_rank();
 
-	// Each iteration halves the number of active threads
-	// Each thread adds its partial sum[i] to sum[lane+i]
 #pragma unroll
 	for (int i = g.size() / 2; i > 0; i /= 2)
 	{
 		temp[lane] = val;
-		g.sync(); // wait for all threads to store
+		g.sync(); 
 		if (lane < i)
 			val += temp[lane + i];
-		g.sync(); // wait for all threads to load
-	}
+		g.sync(); 
 
-	return val; // note: only thread 0 will return full sum
+	return val;
 }
 
 
-__global__ void sum_kernel_32(float *sum, float *input, float n)
+__global__ void sum_kernel_tiled(float *sum, float *input, float n)
 {
     float my_sum = thread_sum(input, n);
 
@@ -64,7 +61,7 @@ float test_reduce_vector_cg_tile(std::vector<float> &a, const size_t n, profiler
     for(auto i = 0; i < test_runs; ++i)
     {
         cudaMemset(sum_dev, 0, sizeof(float));
-        sum_kernel_32<<<blocks, block_size, shared_bytes>>>(sum_dev, a_dev, n);
+        sum_kernel_tiled<<<blocks, block_size, shared_bytes>>>(sum_dev, a_dev, n);
         cudaDeviceSynchronize();
         cuerr = cudaGetLastError();
         cudaCheckError(cuerr);  
