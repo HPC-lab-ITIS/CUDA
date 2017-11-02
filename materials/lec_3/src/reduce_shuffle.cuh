@@ -67,7 +67,7 @@ float test_reduce_shuffle(std::vector<float> &a, const int n, profiler &prof)
 	cudaCheckError(cuerr); 
 
 	deviceReduceKernel<<<1, 1024>>>(tmp, tmp, grid_size);
-        cudaDeviceSynchronize();
+    cudaDeviceSynchronize();
 	cuerr = cudaGetLastError();
 	cudaCheckError(cuerr); 
     }

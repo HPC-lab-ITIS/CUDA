@@ -4,15 +4,17 @@ __device__ float reduce_sum(thread_group g, float *temp, float val)
 {
 	int lane = g.thread_rank();
 
+	// Each iteration halves the number of active threads
+	// Each thread adds its partial sum[i] to sum[lane+i]
 	for (int i = g.size() / 2; i > 0; i /= 2)
 	{
 		temp[lane] = val;
-		g.sync(); 
+		g.sync(); // wait for all threads to store
 		if(lane < i)
 			val += temp[lane + i];
-		g.sync(); 
+		g.sync(); // wait for all threads to load
 	}
-	return val; 
+	return val; // note: only thread 0 will return full sum
 }
 
 

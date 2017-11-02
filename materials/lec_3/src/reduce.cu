@@ -16,11 +16,13 @@ auto count = 0;
 #include "reduce_nobranch.cuh"
 #include "reduce_noconflict.cuh"
 #include "reduce_largeblock.cuh"
+#include "reduce_atomic.cuh"
 #include "reduce_shuffle.cuh"
 #include "reduce_shuffle_warp.cuh"
 #include "reduce_shuffle_block.cuh"
 #include "reduce_vector_cg.cuh"
 #include "reduce_vector_cg_tile.cuh"
+#include "reduce_vector_cg_tile_shuffle.cuh"
 
 
 int main(int argc, char **argv)
@@ -60,6 +62,8 @@ int main(int argc, char **argv)
     sum_dev += test_reduce_nobranch(a, n, prof);
 
     sum_dev += test_reduce_largeblock(a, n, prof);
+    
+    sum_dev += test_reduce_atomic(a, n, prof);
 
     sum_dev += test_reduce_shuffle(a, n, prof);
 
@@ -70,6 +74,8 @@ int main(int argc, char **argv)
     sum_dev += test_reduce_vector_cg(a, n, prof);
 
     sum_dev += test_reduce_vector_cg_tile(a, n, prof);
+    
+    sum_dev += test_reduce_vector_cg_tile_shuffle(a, n, prof);
 
     std::cout << "Error: " << fabs(sum - sum_dev/count) / sum << std::endl;
 
